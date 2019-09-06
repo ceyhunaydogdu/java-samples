@@ -2,11 +2,15 @@ package com.ca.samples.jshell;
 
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import jdk.jshell.*;
 import jdk.jshell.Snippet.Status;
 
 class JShellApp {
+
     public static void main(String[] args) {
         Console console = System.console();
         try (JShell js = JShell.create()) {
@@ -16,7 +20,9 @@ class JShellApp {
                 if (input == null) {
                     break;
                 }
-                List<SnippetEvent> events = js.eval(input);
+                List<SnippetEvent> events = analyzeCode(js,input)   
+                                                .stream().map(js::eval).flatMap(List::stream)
+                                                .collect(Collectors.toList());
                 for (SnippetEvent e : events) {
                     StringBuilder sb = new StringBuilder();
                     if (e.causeSnippet() == null) {
@@ -52,5 +58,16 @@ class JShellApp {
             } while (true);
         }
         System.out.println("\nGoodbye");
+    }
+
+    public static List<String> analyzeCode(JShell js, String code) {
+        SourceCodeAnalysis sca = js.sourceCodeAnalysis();
+        List<String> snippets = new ArrayList<>();
+        do {
+            SourceCodeAnalysis.CompletionInfo info = sca.analyzeCompletion(code);
+            snippets.add(info.source());
+            code = info.remaining();
+        } while (code.length() > 0);
+        return snippets;
     }
 }

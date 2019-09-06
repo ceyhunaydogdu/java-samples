@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - JShellApp",
+            "request": "launch",
+            "mainClass": "com.ca.samples.jshell.JShellApp",
+            "projectName": "java-jshell"
+        }
+    ]
+}

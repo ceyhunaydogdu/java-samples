@@ -4,6 +4,7 @@ package com.ca.samples.jshell;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jdk.jshell.*;
@@ -14,6 +15,7 @@ class JShellApp {
     public static void main(String[] args) {
         Console console = System.console();
         try (JShell js = JShell.create()) {
+            loadDefaultPackages(js);
             do {
                 System.out.print("Enter some Java code: ");
                 String input = console.readLine();
@@ -69,5 +71,18 @@ class JShellApp {
             code = info.remaining();
         } while (code.length() > 0);
         return snippets;
+    }
+
+    public static void loadDefaultPackages(JShell js) {
+        String imports="import java.io.*; import java.math.*; import java.net.*; import java.nio.file.*; import java.util.*; import java.util.concurrent.*; import java.util.funtion.*; import java.util.prefs.*; import java.util.regex.*; import java.util.stream.*;";
+        System.out.println("---> START : loading default packages");
+        analyzeCode(js,imports).stream().map(js::eval).flatMap(List::stream).forEach(e->System.out.println(e.value()));   
+        js.eval("import java.util.*;").stream().forEach(e->System.out.println(e.value()));
+        js.eval("import java.util.stream.*;").stream().forEach(e->System.out.println(e.value()));
+        js.imports().findAny().ifPresentOrElse(is-> {
+                System.out.println(is.source()); 
+            }, ()->System.out.println("No package imported"));
+        System.out.println("---> END : loaded default packages");
+            
     }
 }

@@ -82,10 +82,10 @@ class JShellApp {
         // String imports="import java.io.*; \n import java.math.*; \n import java.net.*; \n import java.nio.file.*; \n import java.util.*; \n import java.util.concurrent.*; \n import java.util.funtion.*; \n import java.util.prefs.*; \n import java.util.regex.*; \n import java.util.stream.*;";
         // analyzeCode(js,imports).stream().map(js::eval).flatMap(List::stream).forEach(e->System.out.println(e.value()));   
         // js.eval("import java.util.*;").stream().forEach(e->System.out.println(e.value()));
-        js.eval("import java.util.stream.*;");
-        js.imports().findAny().ifPresentOrElse(is-> {
-                System.out.println(is.source()); 
-            }, ()->System.out.println("No package imported"));
+        // js.eval("import java.util.stream.*;");
+        // js.imports().findAny().ifPresentOrElse(is-> {
+        //         System.out.println(is.source()); 
+        //     }, ()->System.out.println("No package imported"));
         System.out.println("---> END : loaded default packages");
             
     }
